@@ -7,19 +7,19 @@ import { ServicesSection } from "./sections/ServicesSection";
 import { SliderSection } from "./sections/SliderSection";
 import { Footer } from "./sections/Footer/Footer";
 
-export const Desktop = (): JSX.Element => {
-  return (
-    <div className="flex flex-col w-full bg-black overflow-hidden">
-      <HeroSection />
+export const Desktop = () => {
+    return (
+        <div className="flex flex-col w-full bg-black overflow-hidden">
+            <HeroSection />
 
-      {/* Main Content Container */}
-      <SliderSection />
-      <AboutUsSection />
-      <ServicesSection />
-      <OurApproachSection />
-      <ContactUsSection />
+            {/* Main Content Container */}
+            <SliderSection />
+            <AboutUsSection />
+            <ServicesSection />
+            <OurApproachSection />
+            <ContactUsSection />
 
-      <Footer />
-    </div>
-  );
+            <Footer />
+        </div>
+    );
 };

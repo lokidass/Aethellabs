@@ -163,8 +163,8 @@ const CPPNShaderMaterial = shaderMaterial(
 extend({ CPPNShaderMaterial });
 
 function ShaderPlane() {
-    const meshRef = useRef<THREE.Mesh>(null!);
-    const materialRef = useRef<any>(null!);
+    const meshRef = useRef(null);
+    const materialRef = useRef(null);
 
     useFrame((state) => {
         if (!materialRef.current) return;
@@ -182,9 +182,9 @@ function ShaderPlane() {
 }
 
 function ShaderBackground() {
-    const canvasRef = useRef<HTMLDivElement | null>(null);
+    const canvasRef = useRef(null);
 
-    const camera = useMemo(() => ({ position: [0, 0, 1] as [number, number, number], fov: 75, near: 0.1, far: 1000 }), []);
+    const camera = useMemo(() => ({ position: [0, 0, 1], fov: 75, near: 0.1, far: 1000 }), []);
 
     useGSAP(
         () => {
@@ -224,14 +224,6 @@ function ShaderBackground() {
 }
 
 // ===================== HERO =====================
-interface HeroProps {
-    title: string;
-    description: string;
-    badgeText?: string;
-    badgeLabel?: string;
-    ctaButtons?: Array<{ text: string; href: string; primary?: boolean }>;
-    microDetails?: Array<string>;
-}
 
 export default function NeuralNetworkHero({
     title,
@@ -243,23 +235,23 @@ export default function NeuralNetworkHero({
         { text: "View showcase", href: "#showcase" }
     ],
     microDetails = ["Low‑weight font", "Tight tracking", "Subtle motion"]
-}: HeroProps) {
-    const sectionRef = useRef<HTMLElement | null>(null);
-    const headerRef = useRef<HTMLHeadingElement | null>(null);
-    const paraRef = useRef<HTMLParagraphElement | null>(null);
-    const ctaRef = useRef<HTMLDivElement | null>(null);
-    const badgeRef = useRef<HTMLDivElement | null>(null);
-    const microRef = useRef<HTMLUListElement | null>(null);
-    const microItem1Ref = useRef<HTMLLIElement | null>(null);
-    const microItem2Ref = useRef<HTMLLIElement | null>(null);
-    const microItem3Ref = useRef<HTMLLIElement | null>(null);
+}) {
+    const sectionRef = useRef(null);
+    const headerRef = useRef(null);
+    const paraRef = useRef(null);
+    const ctaRef = useRef(null);
+    const badgeRef = useRef(null);
+    const microRef = useRef(null);
+    const microItem1Ref = useRef(null);
+    const microItem2Ref = useRef(null);
+    const microItem3Ref = useRef(null);
 
     useGSAP(
         () => {
             if (!headerRef.current) return;
 
             document.fonts.ready.then(() => {
-                const split = new SplitText(headerRef.current!, {
+                const split = new SplitText(headerRef.current, {
                     type: 'lines',
                     wordsClass: 'lines',
                 });
@@ -346,8 +338,8 @@ export default function NeuralNetworkHero({
                             key={index}
                             href={button.href}
                             className={`rounded-2xl border border-white/10 px-5 py-3 text-sm font-light tracking-tight transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 duration-300 ${button.primary
-                                    ? "bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
-                                    : "text-white/80 hover:bg-white/5"
+                                ? "bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
+                                : "text-white/80 hover:bg-white/5"
                                 }`}
                         >
                             {button.text}
@@ -370,10 +362,4 @@ export default function NeuralNetworkHero({
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent" />
         </section>
     );
-}
-
-declare module '@react-three/fiber' {
-    interface ThreeElements {
-        cPPNShaderMaterial: any;
-    }
 }

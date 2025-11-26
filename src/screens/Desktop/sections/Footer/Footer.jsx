@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Footer = (): JSX.Element => {
+export const Footer = () => {
     return (
         <footer
             className="w-full flex flex-col items-center pt-10 pb-10 relative"
@@ -17,11 +17,7 @@ export const Footer = (): JSX.Element => {
             <div className="w-full max-w-[1440px] px-[62px] flex items-start justify-between">
                 {/* Left Side: Logo & Tagline */}
                 <div className="flex flex-col gap-2">
-                    <img
-                        className="w-[213px] h-10 object-contain"
-                        alt="Aethel Labs Logo"
-                        src="/image-45.png"
-                    />
+
                     <p className="[font-family:'Inter',Helvetica] font-normal text-[#ffffff80] text-sm tracking-[0] leading-[normal]">
                         making work simple
                     </p>

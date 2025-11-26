@@ -3,6 +3,7 @@ import { Canvas, useFrame, extend, useThree } from '@react-three/fiber';
 import { shaderMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 import { Button } from "../../../../components/ui/button";
+import GlassSurface from "../../../../components/ui/GlassSurface";
 
 // ===================== SHADER =====================
 const vertexShader = `
@@ -148,137 +149,142 @@ const fragmentShader = `
 `;
 
 const CPPNShaderMaterial = shaderMaterial(
-  { iTime: 0, iResolution: new THREE.Vector2(1, 1) },
-  vertexShader,
-  fragmentShader
+    { iTime: 0, iResolution: new THREE.Vector2(1, 1) },
+    vertexShader,
+    fragmentShader
 );
 
 extend({ CPPNShaderMaterial });
 
 function ShaderPlane() {
-  const meshRef = useRef<THREE.Mesh>(null!);
-  const materialRef = useRef<any>(null!);
-  const { viewport } = useThree();
+    const meshRef = useRef(null);
+    const materialRef = useRef(null);
+    const { viewport } = useThree();
 
-  useFrame((state) => {
-    if (!materialRef.current) return;
-    materialRef.current.iTime = state.clock.elapsedTime;
-    const { width, height } = state.size;
-    materialRef.current.iResolution.set(width, height);
-  });
+    useFrame((state) => {
+        if (!materialRef.current) return;
+        materialRef.current.iTime = state.clock.elapsedTime;
+        const { width, height } = state.size;
+        materialRef.current.iResolution.set(width, height);
+    });
 
-  return (
-    <mesh ref={meshRef} scale={[viewport.width, viewport.height, 1]}>
-      <planeGeometry args={[1, 1]} />
-      <cPPNShaderMaterial ref={materialRef} side={THREE.DoubleSide} />
-    </mesh>
-  );
+    return (
+        <mesh ref={meshRef} scale={[viewport.width, viewport.height, 1]}>
+            <planeGeometry args={[1, 1]} />
+            <cPPNShaderMaterial ref={materialRef} side={THREE.DoubleSide} />
+        </mesh>
+    );
 }
 
 function NeuralBackground() {
-  const camera = useMemo(() => ({ position: [0, 0, 1] as [number, number, number], fov: 75, near: 0.1, far: 1000 }), []);
+    const camera = useMemo(() => ({ position: [0, 0, 1], fov: 75, near: 0.1, far: 1000 }), []);
 
-  return (
-    <div className="bg-black absolute inset-0 -z-10 w-full h-full" aria-hidden>
-      <Canvas
-        camera={camera}
-        gl={{ antialias: true, alpha: false }}
-        dpr={[1, 2]}
-        style={{ width: '100%', height: '100%' }}
-      >
-        <ShaderPlane />
-      </Canvas>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20" />
-    </div>
-  );
+    return (
+        <div className="bg-black absolute inset-0 -z-10 w-full h-full" aria-hidden>
+            <Canvas
+                camera={camera}
+                gl={{ antialias: true, alpha: false }}
+                dpr={[1, 2]}
+                style={{ width: '100%', height: '100%' }}
+            >
+                <ShaderPlane />
+            </Canvas>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20" />
+        </div>
+    );
 }
 
 const navItems = [
-  { label: "About", id: "about" },
-  { label: "Service", id: "services" },
-  { label: "Approach", id: "approach" },
-  { label: "Contact us", id: "contact" },
+    { label: "About", id: "about" },
+    { label: "Service", id: "services" },
+    { label: "Approach", id: "approach" },
+    { label: "Contact us", id: "contact" },
 ];
 
-export const HeroSection = (): JSX.Element => {
-  console.log("Rendering HeroSection with NeuralBackground");
+export const HeroSection = () => {
+    console.log("Rendering HeroSection with NeuralBackground");
 
-  const handleScroll = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+    const handleScroll = (id) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
-  return (
-    <section className="flex flex-col min-h-screen items-start relative w-full overflow-hidden bg-black">
-      {/* Neural Network Shader Background */}
-      <div className="absolute inset-0 w-full h-full z-0">
-        <NeuralBackground />
-      </div>
-
-      {/* Content Container */}
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-[62px] pt-[27px] pb-10 flex flex-col min-h-screen">
-        {/* Header */}
-        <header className="flex w-full items-center justify-between gap-[31px] mb-[120px]">
-          <div className="flex items-start w-[213px] px-2 py-2.5">
-            <img
-              className="w-full h-10 object-contain"
-              alt="Aethel Labs Logo"
-              src="/image-45.png"
-            />
-          </div>
-
-          <nav className="flex items-center justify-center h-[60px] px-8 gap-5 bg-[#00000000] rounded-[20px] overflow-hidden shadow-[inset_0px_0px_25.1px_#5f34fb4c,inset_0_1px_0_rgba(255,255,255,0.40),inset_1px_0_0_rgba(255,255,255,0.32),inset_0_-1px_1px_rgba(0,0,0,0.13),inset_-1px_0_1px_rgba(0,0,0,0.11)] backdrop-blur-[2.0px] backdrop-brightness-[110%] [-webkit-backdrop-filter:blur(2.0px)_brightness(110%)]">
-            <div className="inline-flex items-center gap-5">
-              {navItems.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleScroll(item.id)}
-                  className="px-4 [font-family:'Inter',Helvetica] font-normal text-white text-xl text-center tracking-[0] leading-[normal] hover:opacity-80 transition-opacity cursor-pointer whitespace-nowrap"
-                >
-                  {item.label}
-                </button>
-              ))}
+    return (
+        <section className="flex flex-col min-h-screen items-start relative w-full overflow-hidden bg-black">
+            {/* Neural Network Shader Background */}
+            <div className="absolute inset-0 w-full h-full z-0">
+                <NeuralBackground />
             </div>
-          </nav>
 
-          <div className="flex items-start w-[261px]">
-            <Button className="w-full h-[60px] bg-[#4e2bcd] rounded-[9px] shadow-[inset_0px_4px_4px_#a975f8] hover:bg-[#4e2bcd]/90 [font-family:'Inter',Helvetica] font-medium text-white text-2xl">
-              Get Started
-            </Button>
-          </div>
-        </header>
+            {/* Content Container */}
+            <div className="relative z-10 w-full max-w-[1440px] mx-auto px-[62px] pt-[27px] pb-10 flex flex-col min-h-screen">
+                {/* Header */}
+                <header className="flex w-full items-center justify-between gap-[31px] mb-[120px]">
+                    <div className="flex items-start w-[213px] px-2 py-2.5">
+                        <img
+                            className="w-full h-10 object-contain"
+                            alt="Aethel Labs Logo"
+                            src="/image-45.png"
+                        />
+                    </div>
 
-        {/* Hero Content */}
-        <div className="flex flex-col max-w-[772px]">
-          <h1 className="w-full max-w-[768px] [text-shadow:0px_4px_7.2px_#00000040] [font-family:'Inter',Helvetica] font-bold text-[64px] tracking-[0] leading-[1.2] mb-8">
-            <span className="text-white">
-              We automate repetitive tasks so you can focus on{" "}
-            </span>
-            <span className="text-[#5f34fb]">growth</span>
-            <span className="text-white">.</span>
-          </h1>
+                    <GlassSurface
+                        width="fit-content"
+                        height={60}
+                        borderRadius={20}
+                        className="px-8"
+                        backgroundOpacity={0}
+                    >
+                        <div className="inline-flex items-center gap-5">
+                            {navItems.map((item, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => handleScroll(item.id)}
+                                    className="px-4 [font-family:'Inter',Helvetica] font-normal text-white text-xl text-center tracking-[0] leading-[normal] hover:opacity-80 transition-opacity cursor-pointer whitespace-nowrap"
+                                >
+                                    {item.label}
+                                </button>
+                            ))}
+                        </div>
+                    </GlassSurface>
 
-          <p className="w-full max-w-[662px] [text-shadow:0px_4px_7.2px_#00000040] [font-family:'Inter',Helvetica] font-normal text-white text-xl tracking-[0] leading-[1.5] mb-12">
-            Aethel Labs helps businesses automate critical workflows, reduce
-            costs, and scale efficiently with AI-powered systems.
-          </p>
+                    <div className="flex items-start w-[261px]">
+                        <Button className="w-full h-[60px] bg-[#4e2bcd] rounded-[9px] shadow-[inset_0px_4px_4px_#a975f8] hover:bg-[#4e2bcd]/90 [font-family:'Inter',Helvetica] font-medium text-white text-2xl">
+                            Get Started
+                        </Button>
+                    </div>
+                </header>
 
-          <Button
-            variant="outline"
-            className="w-[304px] h-[61px] bg-[#00000000] rounded-[11px] border border-solid border-[#6701ff] shadow-[inset_0px_0px_39.3px_6px_#5f34fb0a,inset_0_1px_0_rgba(255,255,255,0.40),inset_1px_0_0_rgba(255,255,255,0.32),inset_0_-1px_1px_rgba(0,0,0,0.13),inset_-1px_0_1px_rgba(0,0,0,0.11)] backdrop-blur-[2.0px] backdrop-brightness-[110%] [-webkit-backdrop-filter:blur(2.0px)_brightness(110%)] hover:bg-[#00000000] [font-family:'Inter',Helvetica] font-medium text-2xl"
-          >
-            <span className="text-[#f4f2f9]">Schedule a meet</span>
-          </Button>
-        </div>
-      </div>
-    </section>
-  );
+                {/* Hero Content */}
+                <div className="flex flex-col max-w-[772px]">
+                    <h1 className="w-full max-w-[768px] [text-shadow:0px_4px_7.2px_#00000040] [font-family:'Inter',Helvetica] font-bold text-[64px] tracking-[0] leading-[1.2] mb-8">
+                        <span className="text-white">
+                            We automate repetitive tasks so you can focus on{" "}
+                        </span>
+                        <span className="text-[#5f34fb]">growth</span>
+                        <span className="text-white">.</span>
+                    </h1>
+
+                    <p className="w-full max-w-[662px] [text-shadow:0px_4px_7.2px_#00000040] [font-family:'Inter',Helvetica] font-normal text-white text-xl tracking-[0] leading-[1.5] mb-12">
+                        Aethel Labs helps businesses automate critical workflows, reduce
+                        costs, and scale efficiently with AI-powered systems.
+                    </p>
+
+                    <button className="bg-transparent border-0 p-0 cursor-pointer outline-none">
+                        <GlassSurface
+                            width={304}
+                            height={61}
+                            borderRadius={11}
+                            backgroundOpacity={0}
+                            className="border border-solid border-[#6701ff] shadow-[inset_0px_0px_39.3px_6px_#5f34fb0a,inset_0_1px_0_rgba(255,255,255,0.40),inset_1px_0_0_rgba(255,255,255,0.32),inset_0_-1px_1px_rgba(0,0,0,0.13),inset_-1px_0_1px_rgba(0,0,0,0.11)] hover:opacity-90 transition-opacity"
+                        >
+                            <span className="text-[#f4f2f9] [font-family:'Inter',Helvetica] font-medium text-2xl">Schedule a meet</span>
+                        </GlassSurface>
+                    </button>
+                </div>
+            </div>
+        </section>
+    );
 };
-
-declare module '@react-three/fiber' {
-  interface ThreeElements {
-    cPPNShaderMaterial: any;
-  }
-}
