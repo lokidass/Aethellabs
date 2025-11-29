@@ -18,7 +18,7 @@ export const Footer = () => {
                 {/* Left Side: Logo & Tagline */}
                 <div className="flex flex-col gap-2">
 
-                    <p className="[font-family:'Inter',Helvetica] font-normal text-[#ffffff80] text-sm tracking-[0] leading-[normal]">
+                    <p className="[font-family:'Inter',Helvetica] font-normal text-[#ffffff80] text-sm tracking-[0] leading-[normal] ml-[60px] mt-[15px]">
                         making work simple
                     </p>
                 </div>
