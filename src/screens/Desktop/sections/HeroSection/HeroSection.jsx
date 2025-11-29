@@ -251,7 +251,10 @@ export const HeroSection = () => {
                     </GlassSurface>
 
                     <div className="flex items-start w-[261px]">
-                        <Button className="w-full h-[60px] bg-[#4e2bcd] rounded-[9px] shadow-[inset_0px_4px_4px_#a975f8] hover:bg-[#4e2bcd]/90 [font-family:'Inter',Helvetica] font-medium text-white text-2xl">
+                        <Button
+                            onClick={() => handleScroll('contact')}
+                            className="w-full h-[60px] bg-[#4e2bcd] rounded-[9px] shadow-[inset_0px_4px_4px_#a975f8] hover:bg-[#4e2bcd]/90 [font-family:'Inter',Helvetica] font-medium text-white text-2xl"
+                        >
                             Get Started
                         </Button>
                     </div>
@@ -272,7 +275,10 @@ export const HeroSection = () => {
                         costs, and scale efficiently with AI-powered systems.
                     </p>
 
-                    <button className="bg-transparent border-0 p-0 cursor-pointer outline-none">
+                    <button
+                        onClick={() => window.open('https://cal.com/aethellabs/discovery', '_blank')}
+                        className="bg-transparent border-0 p-0 cursor-pointer outline-none"
+                    >
                         <GlassSurface
                             width={304}
                             height={61}

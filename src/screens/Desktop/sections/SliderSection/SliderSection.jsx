@@ -21,14 +21,20 @@ export const SliderSection = () => {
     useGSAP(() => {
         if (!containerRef.current) return;
 
-        const totalWidth = containerRef.current.scrollWidth / 2; // Approximate half width for loop
-
-        // Infinite scroll animation
-        const tl = gsap.timeline({ repeat: -1 });
-        tl.to(containerRef.current, {
-            x: "-50%",
-            duration: 20,
+        // Seamless infinite scroll animation using modifiers
+        gsap.to(containerRef.current, {
+            x: "-25%", // Move by 25% (one full loop of original items)
+            duration: 23, // Slowed down from 20 to 30 seconds
             ease: "none",
+            repeat: -1,
+            modifiers: {
+                x: function (x) {
+                    // Parse the percentage and wrap it using modulo
+                    // This creates a seamless loop
+                    const progress = parseFloat(x);
+                    return ((progress % 25) - 25) + "%";
+                }
+            }
         });
 
         // Proximity effect
